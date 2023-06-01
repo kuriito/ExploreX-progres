@@ -38,6 +38,7 @@
         android:background="@drawable/button_background"
         android:layout_marginTop="15sp"
         android:text="LOGIN"
+        android:textColor="@color/colorWhite"
         android:padding="10dp"
         android:id="@+id/login"/>
 
