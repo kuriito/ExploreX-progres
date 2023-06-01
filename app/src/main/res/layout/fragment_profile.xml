@@ -155,7 +155,9 @@
                         android:padding="5dp"
                         android:layout_marginTop="10dp"
                         android:text="EDIT PROFILE"
-                        android:id="@+id/edit_profile"/>
+                        android:textColor="@color/colorWhite"
+                        android:id="@+id/edit_profile"
+                        android:background="@drawable/button_background"/>
 
                 </LinearLayout>
 
