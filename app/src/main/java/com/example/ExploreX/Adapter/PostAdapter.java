@@ -282,7 +282,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
                     ActivityCompat.requestPermissions((FragmentActivity) mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 } else {
                     String fileName = System.currentTimeMillis() + ".jpg";
-                    File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/YourAppName/");
+                    File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/ExploreX/");
                     dir.mkdirs();
                     File file = new File(dir, fileName);
                     try {
