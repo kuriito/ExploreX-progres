@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             app:itemIconTint="@color/selector"
             app:labelVisibilityMode="unlabeled"
-            android:background="#E7CBCB"
+            android:background="#643843"
             app:menu="@menu/bottom_menu"/>
 
     </com.google.android.material.appbar.AppBarLayout>
