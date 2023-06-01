@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rishav.ExploreX">
+    package="com.example.ExploreX">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,15 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.rishav.ExploreX.OptionsActivity"></activity>
-        <activity android:name="com.rishav.ExploreX.FollowersActivity" />
-        <activity android:name="com.rishav.ExploreX.EditProfileActivity" />
-        <activity android:name="com.rishav.ExploreX.CommentActivity" />
-        <activity android:name="com.rishav.ExploreX.PostActivity" />
-        <activity android:name="com.rishav.ExploreX.MainActivity" />
-        <activity android:name="com.rishav.ExploreX.LoginActivity" />
-        <activity android:name="com.rishav.ExploreX.RegisterActivity" />
-        <activity android:name="com.rishav.ExploreX.StartActivity">
+        <activity android:name="com.example.ExploreX.OptionsActivity"></activity>
+        <activity android:name="com.example.ExploreX.FollowersActivity" />
+        <activity android:name="com.example.ExploreX.EditProfileActivity" />
+        <activity android:name="com.example.ExploreX.CommentActivity" />
+        <activity android:name="com.example.ExploreX.PostActivity" />
+        <activity android:name="com.example.ExploreX.MainActivity" />
+        <activity android:name="com.example.ExploreX.LoginActivity" />
+        <activity android:name="com.example.ExploreX.RegisterActivity" />
+        <activity android:name="com.example.ExploreX.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
