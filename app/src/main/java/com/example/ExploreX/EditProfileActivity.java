@@ -29,8 +29,6 @@ import com.google.firebase.storage.UploadTask;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.example.ExploreX.Model.User;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 
@@ -49,7 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseUser fUser;
 
     private Uri mImageUri;
-    private StorageTask uploadTask;
+    private StorageTask<UploadTask.TaskSnapshot> uploadTask;
     private StorageReference storageRef;
 
     @Override
@@ -94,14 +92,14 @@ public class EditProfileActivity extends AppCompatActivity {
         changePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CropImage.activity().setCropShape(CropImageView.CropShape.OVAL).start(EditProfileActivity.this);
+                chooseImage();
             }
         });
 
         imageProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CropImage.activity().setCropShape(CropImageView.CropShape.OVAL).start(EditProfileActivity.this);
+                chooseImage();
             }
         });
 
@@ -111,6 +109,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 updateProfile();
             }
         });
+    }
+
+    private void chooseImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, 1);
     }
 
     private void updateProfile() {
@@ -162,14 +166,13 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            mImageUri = result.getUri();
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+            imageProfile.setImageURI(mImageUri);
 
             uploadImage();
         } else {

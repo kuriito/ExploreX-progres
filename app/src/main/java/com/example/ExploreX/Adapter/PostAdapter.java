@@ -1,21 +1,38 @@
 package com.example.ExploreX.Adapter;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hendraanggrian.appcompat.widget.SocialTextView;
@@ -28,6 +45,10 @@ import com.example.ExploreX.Model.User;
 import com.example.ExploreX.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,6 +78,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
         final Post post = mPosts.get(position);
         Picasso.get().load(post.getImageurl()).into(holder.postImage);
         holder.description.setText(post.getDescription());
+
 
         FirebaseDatabase.getInstance().getReference().child("Users").child(post.getPublisher()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -183,6 +205,112 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
                 mContext.startActivity(intent);
             }
         });
+
+        // ...
+
+        holder.more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu(holder.more, post);
+            }
+            private void showPopupMenu(View anchorView, final Post post) {
+                PopupMenu popupMenu = new PopupMenu(mContext, anchorView);
+                popupMenu.inflate(R.menu.post_menu);
+
+                // Cek apakah pengguna saat ini adalah pemilik postingan
+                if (post.getPublisher().equals(firebaseUser.getUid())) {
+                    popupMenu.getMenu().findItem(R.id.action_delete).setVisible(true);
+                } else {
+                    popupMenu.getMenu().findItem(R.id.action_delete).setVisible(false);
+                }
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_delete:
+                                deletePost(post);
+                                return true;
+                            case R.id.action_download:
+                                downloadPost(post);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+
+                popupMenu.show();
+            }
+
+            private void deletePost(final Post post) {
+                FirebaseDatabase.getInstance().getReference().child("Posts").child(post.getPostid()).removeValue(new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error == null) {
+                            Toast.makeText(mContext, "Postingan dihapus", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, "Gagal menghapus postingan", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+            private void downloadPost(final Post post) {
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(post.getImageurl())
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                saveImage(resource);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+
+                            @Override
+                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                Toast.makeText(mContext, "Gagal mengunduh gambar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+            private void saveImage(Bitmap bitmap) {
+                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions((FragmentActivity) mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    String fileName = System.currentTimeMillis() + ".jpg";
+                    File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/YourAppName/");
+                    dir.mkdirs();
+                    File file = new File(dir, fileName);
+                    try {
+                        OutputStream outputStream = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                        outputStream.flush();
+                        outputStream.close();
+
+                        // Menambahkan gambar ke galeri
+                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        Uri contentUri = Uri.fromFile(file);
+                        mediaScanIntent.setData(contentUri);
+                        mContext.sendBroadcast(mediaScanIntent);
+
+                        Toast.makeText(mContext, "Gambar berhasil diunduh", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(mContext, "Gagal mengunduh gambar", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+
+// ...
+
+
+        });
+
 
     }
 
