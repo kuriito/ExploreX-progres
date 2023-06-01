@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.example.ExploreX.Model.User;
 import com.squareup.picasso.Picasso;
@@ -130,14 +131,14 @@ public class EditProfileActivity extends AppCompatActivity {
             final StorageReference fileRef = storageRef.child(System.currentTimeMillis() + ".jpeg");
 
             uploadTask = fileRef.putFile(mImageUri);
-            uploadTask.continueWithTask(new Continuation() {
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
-                public Object then(@NonNull Task task) throws Exception {
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if (!task.isSuccessful()) {
                         throw task.getException();
                     }
 
-                    return  fileRef.getDownloadUrl();
+                    return fileRef.getDownloadUrl();
                 }
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
@@ -146,7 +147,10 @@ public class EditProfileActivity extends AppCompatActivity {
                         Uri downloadUri = task.getResult();
                         String url = downloadUri.toString();
 
-                        FirebaseDatabase.getInstance().getReference().child("Users").child(fUser.getUid()).child("imageurl").setValue(url);
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("imageurl", url);
+
+                        FirebaseDatabase.getInstance().getReference().child("Users").child(fUser.getUid()).updateChildren(map);
                         pd.dismiss();
                     } else {
                         Toast.makeText(EditProfileActivity.this, "Upload failed!", Toast.LENGTH_SHORT).show();
@@ -157,6 +161,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
