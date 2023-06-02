@@ -39,7 +39,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.notification_item, parent, false);
-
         return new NotificationAdapter.ViewHolder(view);
     }
 
@@ -65,13 +64,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
                             .edit().putString("postid", notification.getPostid()).apply();
 
-                    ((FragmentActivity)mContext).getSupportFragmentManager()
+                    ((FragmentActivity) mContext).getSupportFragmentManager()
                             .beginTransaction().replace(R.id.fragment_container, new PostDetailFragment()).commit();
                 } else {
                     mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
                             .edit().putString("profileId", notification.getUserid()).apply();
 
-                    ((FragmentActivity)mContext).getSupportFragmentManager()
+                    ((FragmentActivity) mContext).getSupportFragmentManager()
                             .beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 }
             }
@@ -84,7 +83,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return mNotifications.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageProfile;
         public ImageView postImage;
@@ -106,7 +105,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Post post = dataSnapshot.getValue(Post.class);
-                Picasso.get().load(post.getImageurl()).placeholder(R.mipmap.ic_launcher).into(imageView);
+                if (post != null) {
+                    Picasso.get().load(post.getImageurl()).placeholder(R.mipmap.ic_launcher).into(imageView);
+                }
             }
 
             @Override
@@ -121,12 +122,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                if (user.getImageurl().equals("default")) {
-                    imageView.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    Picasso.get().load(user.getImageurl()).into(imageView);
+                if (user != null) {
+                    if (user.getImageurl().equals("default")) {
+                        imageView.setImageResource(R.mipmap.ic_launcher);
+                    } else {
+                        Picasso.get().load(user.getImageurl()).into(imageView);
+                    }
+                    textView.setText(user.getUsername());
                 }
-                textView.setText(user.getUsername());
             }
 
             @Override
@@ -135,5 +138,4 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             }
         });
     }
-
 }
