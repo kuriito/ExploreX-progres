@@ -128,7 +128,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void uploadImage() {
         final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Uploading");
+        pd.setMessage("Mengunggah");
         pd.show();
 
         if (mImageUri != null) {
@@ -157,12 +157,12 @@ public class EditProfileActivity extends AppCompatActivity {
                         FirebaseDatabase.getInstance().getReference().child("Users").child(fUser.getUid()).updateChildren(map);
                         pd.dismiss();
                     } else {
-                        Toast.makeText(EditProfileActivity.this, "Upload failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProfileActivity.this, "Gagal mengunggah!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         } else {
-            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Silahkan memilih gambar", Toast.LENGTH_SHORT).show();
         }
     }
 

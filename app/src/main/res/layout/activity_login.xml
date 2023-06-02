@@ -11,7 +11,7 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         android:src="@drawable/logo"/>
 
     <EditText
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
         android:layout_marginTop="15sp"
-        android:text="LOGIN"
+        android:text="MASUK"
         android:textColor="@color/colorWhite"
         android:padding="10dp"
         android:id="@+id/login"/>
@@ -45,7 +45,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New to Instagram? Register"
+        android:text="Tidak punya akun? Daftar"
         android:layout_marginTop="15dp"
         android:id="@+id/register_user"/>
 

@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
         android:layout_marginTop="15sp"
-        android:text="REGISTER"
+        android:text="DAFTAR"
         android:textColor="@color/colorWhite"
         android:padding="10dp"
         android:id="@+id/register"/>
@@ -63,7 +63,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already a user? LogIn"
+        android:text="Sudah punya akun? Masuk"
         android:layout_marginTop="15dp"
         android:id="@+id/login_user"/>
 
