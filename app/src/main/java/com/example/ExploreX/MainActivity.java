@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        meowBottomNavigation.setCount(1, "10");
+        meowBottomNavigation.setCount(4, "10");
 
         //set default
         meowBottomNavigation.show(1, true);
