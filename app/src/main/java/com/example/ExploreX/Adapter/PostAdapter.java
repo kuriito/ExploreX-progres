@@ -86,9 +86,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
                 User user = dataSnapshot.getValue(User.class);
 
                 if (user.getImageurl().equals("default")) {
-                    holder.imageProfile.setImageResource(R.mipmap.ic_launcher);
+                    holder.imageProfile.setImageResource(R.drawable.foto_default);
                 } else {
-                    Picasso.get().load(user.getImageurl()).placeholder(R.mipmap.ic_launcher).into(holder.imageProfile);
+                    Picasso.get().load(user.getImageurl()).placeholder(R.drawable.foto_default).into(holder.imageProfile);
                 }
                 holder.username.setText(user.getUsername());
                 holder.author.setText(user.getName());
