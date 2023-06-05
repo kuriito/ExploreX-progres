@@ -204,7 +204,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_my_pictures" />
+                    android:src="@drawable/baseline_collections_24" />
 
                 <ImageButton
                     android:id="@+id/saved_pictures"
@@ -212,7 +212,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_save" />
+                    android:src="@drawable/baseline_bookmarks_24" />
 
             </LinearLayout>
 
