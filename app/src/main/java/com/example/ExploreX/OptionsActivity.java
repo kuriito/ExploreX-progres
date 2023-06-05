@@ -23,7 +23,6 @@ public class OptionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
-        settings = findViewById(R.id.settings);
         logOut = findViewById(R.id.logout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
